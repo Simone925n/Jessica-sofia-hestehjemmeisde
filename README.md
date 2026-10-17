@@ -11,7 +11,7 @@ npm ci
 npm run dev -- --port 5173
 ```
 
-Vite starter på port **5173** og lytter på alle interfaces. Hvis din Codex-visning tilbyder en webvisning eller portvisning, vælg port 5173. Cloud-onboardingvisningen understøtter ikke et direkte localhost-preview; brug i så fald en lokal checkout og åbn den adresse, Vite viser i din terminal. Der er ikke publiceret et offentligt website.
+Vite starter på port **5173** og lytter på alle interfaces. Åbn `/Jessica-sofia-hestehjemmeisde/` på udviklingsserveren. Hvis din Codex-visning tilbyder en webvisning eller portvisning, vælg port 5173. Cloud-onboardingvisningen understøtter ikke et direkte localhost-preview; brug i så fald en lokal checkout og åbn den adresse, Vite viser i din terminal. GitHub Pages udgives af workflowet beskrevet nedenfor.
 
 ```bash
 npm run build       # TypeScript-kontrol + produktionsbuild i dist/
@@ -63,14 +63,16 @@ Der anvendes ingen lokal lagring af formularer. Oplysninger findes kun i sidens 
 4. Tilføj privatlivsoplysninger, databehandleraftaler og passende sikkerhed. Brug en godkendt server-/udbyderløsning til kundedata. API-nøgler må ikke ligge i frontend.
 5. Tilslut kontaktformularen til en sikker formular-/mailtjeneste med spamkontrol og ærlige fejl-/kvitteringsbeskeder. Konfigurer ikke betaling, før aftalevilkår og sikker integration er klar.
 
-## Udgivelse for begyndere
+## Automatisk udgivelse på GitHub Pages
 
-Siden kan hostes statisk på Netlify eller Vercel:
+Website: **https://simone925n.github.io/Jessica-sofia-hestehjemmeisde/**
 
-1. Opret og push en commit til dit GitHub-repository (der er ikke automatisk pushet fra dette arbejde).
-2. Forbind repositoryet i hostingtjenestens brugerflade.
-3. Vælg buildkommando **`npm run build`** og outputmappe **`dist`**. Brug Node 22 eller 24.
-4. SPA-omskrivning er med i `public/_redirects` til Netlify og `vercel.json` til Vercel. På andre hosts skal ukendte sidestier pege på `index.html`, så direkte links til fx `/hestene/freja` fungerer.
-5. Kontrollér sider, mobilmenu og demoformularer på hostingtjenestens testadresse. Tilslut først eget domæne efter indholdskontrol.
+Repositoryets **Settings → Pages → Source** skal være **GitHub Actions**. Workflowet i `.github/workflows/deploy-pages.yml` kører ved push til `main` og kan også startes manuelt fra fanen **Actions**. Det installerer låste afhængigheder med `npm ci`, bygger med Node 24 og `npm run build`, uploader `dist` og udgiver med GitHubs officielle Pages-actions. Under **Actions → Deploy website to GitHub Pages** ses status og eventuelle fejl. Første udgivelse kan tage nogle minutter.
 
-Cloudmiljøets publicering og offentlig udgivelse af hjemmesiden er to forskellige handlinger. Ingen af dem sker automatisk med et build.
+Vite bruger den præcise base `/Jessica-sofia-hestehjemmeisde/`. Router, scripts, billeder, favicon og skrifttyper følger denne sti. `vite.config.ts` opretter `index.html` i hver sides undermappe samt `404.html`, fordi Pages ikke tilbyder SPA-omskrivning. Dermed virker direkte links og genindlæsning på fx `/Jessica-sofia-hestehjemmeisde/hestene/freja/` med HTTP 200. Ukendte sider viser hjemmesidens egen 404-side. Nye heste får automatisk en statisk side fra `horses.ts`; nye hovedsider skal også registreres i navigationen.
+
+`npm test` kontrollerer både udviklingsserveren og produktionsfilerne på en separat, streng statisk server uden SPA-fallback. Det dækker repository-stien, billeder, direkte links, genindlæsning, klientnavigation og bookingparametre på mobil og desktop. Produktionsbuildet laves automatisk før den statiske testserver starter.
+
+Ved senere flytning til eget domæne eller en anden host skal `base` i `vite.config.ts` tilpasses (ofte til `/`). Netlify- og Vercel-konfigurationerne er fortsat med, men GitHub Pages bruger kun Actions-workflowet.
+
+Cloudmiljøets publicering og offentlig udgivelse af hjemmesiden er to forskellige handlinger. Et lokalt build udgiver ikke siden; push til `main` starter GitHub Actions.

@@ -12,7 +12,7 @@ test("grundlæggende WCAG-kontrol på hovedsider", async ({ page }) => {
     "/kontakt",
     "/privatliv",
   ]) {
-    await page.goto(path);
+    await page.goto(`/Jessica-sofia-hestehjemmeisde${path}`);
     await page.evaluate(() => document.fonts.ready);
     await page.emulateMedia({ reducedMotion: "reduce" });
     const result = await new AxeBuilder({ page })
@@ -37,7 +37,7 @@ test("smal mobil og tablet uden vandret overløb", async ({ page }) => {
       "/kontakt",
       "/hestene/freja",
     ]) {
-      await page.goto(path);
+      await page.goto(`/Jessica-sofia-hestehjemmeisde${path}`);
       expect(
         await page.evaluate(
           () => document.documentElement.scrollWidth <= innerWidth,

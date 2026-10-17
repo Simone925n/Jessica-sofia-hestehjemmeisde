@@ -65,7 +65,11 @@ export function Photo({
         </div>
       ) : (
         <img
-          src={src}
+          src={
+            src.startsWith("/")
+              ? `${import.meta.env.BASE_URL}${src.slice(1)}`
+              : src
+          }
           alt={alt}
           style={{ objectPosition: position }}
           loading={priority ? "eager" : "lazy"}

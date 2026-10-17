@@ -6,6 +6,8 @@ export default defineConfig({
   workers: 2,
   use: {
     baseURL: "http://127.0.0.1:5173",
+    // Existing tests use site-relative paths; always include the Pages prefix.
+    // Navigation coverage against the production static output lives in pages.spec.ts.
     headless: true,
     launchOptions: {
       ...(existsSync("/usr/bin/chromium")
@@ -13,11 +15,18 @@ export default defineConfig({
         : {}),
     },
   },
-  webServer: {
-    command: "npm run dev -- --port 5173",
-    url: "http://127.0.0.1:5173",
-    reuseExistingServer: true,
-  },
+  webServer: [
+    {
+      command: "npm run dev -- --port 5173",
+      url: "http://127.0.0.1:5173",
+      reuseExistingServer: true,
+    },
+    {
+      command: "npm run build && node tests/serve-pages.mjs",
+      url: "http://127.0.0.1:4180/Jessica-sofia-hestehjemmeisde/",
+      reuseExistingServer: false,
+    },
+  ],
   projects: [
     { name: "desktop", use: { viewport: { width: 1440, height: 1000 } } },
     {

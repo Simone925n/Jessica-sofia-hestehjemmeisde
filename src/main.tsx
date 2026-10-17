@@ -58,7 +58,8 @@ const titles: Record<string, [string, string]> = {
   ],
 };
 function Metadata() {
-  const { pathname } = useLocation();
+  const location = useLocation();
+  const pathname = location.pathname.replace(/\/+$/, "") || "/";
   useEffect(() => {
     const horse = horses.find((h) => pathname === `/hestene/${h.slug}`);
     const [title, description] = horse
@@ -118,11 +119,11 @@ class ErrorBoundary extends React.Component<
     );
   }
 }
-// BrowserRouter kræver en SPA-omskrivning på hostingplatformen, se README.
+// Vite generates HTML entries for direct links on GitHub Pages.
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ErrorBoundary>
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <Metadata />
         <Routes>
           <Route element={<Layout />}>

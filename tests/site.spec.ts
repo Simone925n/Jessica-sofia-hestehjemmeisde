@@ -19,7 +19,7 @@ test("alle sider, billeder og profiler vises uden browserfejl eller vandret over
     "/privatliv",
     "/ukendt",
   ]) {
-    await page.goto(path);
+    await page.goto(`/Jessica-sofia-hestehjemmeisde${path}`);
     await expect(page.locator("h1")).toBeVisible();
     await page.evaluate(() => document.fonts.ready);
     expect(
@@ -43,7 +43,7 @@ test("alle sider, billeder og profiler vises uden browserfejl eller vandret over
 test("quiz afsluttes med korrekt score, låste svar og genstart", async ({
   page,
 }) => {
-  await page.goto("/quiz");
+  await page.goto("/Jessica-sofia-hestehjemmeisde/quiz");
   await page.getByRole("button", { name: "Start quizzen" }).click();
   for (let i = 0; i < questions.length; i++) {
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
@@ -72,7 +72,7 @@ test("quiz afsluttes med korrekt score, låste svar og genstart", async ({
 test("booking validerer felter, opdaterer beløb og afslutter ærligt uden netværk", async ({
   page,
 }) => {
-  await page.goto("/rideture?tur=nature");
+  await page.goto("/Jessica-sofia-hestehjemmeisde/rideture?tur=nature");
   await expect(page.locator(".booking-summary h3")).toHaveText(
     "Ud i det grønne",
   );
@@ -110,7 +110,7 @@ test("booking validerer felter, opdaterer beløb og afslutter ærligt uden netv�
   ).toBeVisible();
 });
 test("kontakt validerer og sender ingen besked", async ({ page }) => {
-  await page.goto("/kontakt");
+  await page.goto("/Jessica-sofia-hestehjemmeisde/kontakt");
   await page.getByRole("button", { name: "Afprøv formular" }).click();
   await expect(page.getByRole("status")).toHaveCount(0);
   await page.getByLabel("Navn", { exact: true }).fill("Demo");
@@ -123,7 +123,7 @@ test("kontakt validerer og sender ingen besked", async ({ page }) => {
   );
 });
 test("fakta og gangarter fungerer med tastatur", async ({ page }) => {
-  await page.goto("/islandshesten");
+  await page.goto("/Jessica-sofia-hestehjemmeisde/islandshesten");
   await page.locator(".fact summary").first().click();
   await expect(page.locator(".fact").first()).toHaveAttribute("open", "");
   await page.getByRole("tab", { name: "04 Tölt" }).click();
@@ -137,7 +137,7 @@ test("fakta og gangarter fungerer med tastatur", async ({ page }) => {
 test("navigation åbner sider og mobilmenu kan lukkes med Escape", async ({
   page,
 }, testInfo) => {
-  await page.goto("/");
+  await page.goto("/Jessica-sofia-hestehjemmeisde/");
   if (testInfo.project.name === "mobile") {
     await page.getByRole("button", { name: "Åbn menu" }).click();
     await page
